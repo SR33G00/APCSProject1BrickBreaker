@@ -21,15 +21,31 @@ public class Brick {
     }
     public void collide(Ball ball){
         //collision with bottom of the brick
-        if(ball.y + ball.radius == this.y + this.height) {
-            if ((ball.x - ball.radius) >= this.x && ball.x + ball.radius <= this.x + this.width) {
+        if(ball.y - ball.radius/2 <= this.y + this.height) {
+            if ((ball.x) >= this.x && ball.x <= this.x + this.width) {
                 removeBrick();
                 ball.ySpeed = ball.ySpeed * -1;
+            }
+        }
+
+        if(ball.y + ball.radius >= this.y && ball.y + ball.y <= this.y + height){
+            if(ball.x + ball.radius >= this.x && ball.x - ball.radius <= this.x){
+                removeBrick();
+                ball.xSpeed = ball.xSpeed * -1;
+            }
+        }
+
+        if(ball.y >= this.y && ball.y <= this.y + height){
+            if(ball.x + ball.radius >= this.x && ball.x - ball.radius <= this.x){
+                removeBrick();
+                ball.xSpeed = ball.xSpeed * -1;
             }
         }
     }
     public void removeBrick(){
         this.width = 0;
         this.height = 0;
+        this.y = -100000;
+        this.x = -100000;
     }
 }

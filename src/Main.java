@@ -23,7 +23,7 @@ public class Main extends PApplet {
                 bricks.add(new Brick(i, j, 20, 50));
             }
         }
-        ball = new Ball(500,300,1,1, 15);
+        ball = new Ball(400,300,1,3, 15);
     }
 
     /***
