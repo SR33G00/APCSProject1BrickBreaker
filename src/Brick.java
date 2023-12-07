@@ -13,7 +13,6 @@ public class Brick {
     }
     public boolean isAlive(){
      return isAlive;
-
     }
     public void draw(PApplet window){
         window.fill(255,0,0);
@@ -41,6 +40,12 @@ public class Brick {
                 ball.xSpeed = ball.xSpeed * -1;
             }
         }
+    }
+    public int getX(){
+        return this.x;
+    }
+    public int getY(){
+        return this.y;
     }
     public void removeBrick(){
         this.width = 0;
