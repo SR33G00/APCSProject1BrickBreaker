@@ -16,7 +16,7 @@ public class Brick {
     }
     public void draw(PApplet window){
         window.fill(255,0,0);
-        window.rect(this.x, this.y, this.width, this.height);
+      //  window.rect(this.x, this.y, this.width, this.height);
     }
     public void collide(Ball ball){
         //collision with bottom of the brick

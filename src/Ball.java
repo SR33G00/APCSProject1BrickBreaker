@@ -1,23 +1,31 @@
 import processing.core.PApplet;
+import processing.core.PImage;
 
 import java.util.ArrayList;
 
 public class Ball {
     double x, y, xSpeed, ySpeed, radius;
 
-    public Ball(double x, double y, double xSpeed, double ySpeed, int radius) {
+    PImage WinningScreen = new PImage();
+    PImage GameOver = new PImage();
+
+
+    public Ball(double x, double y, double xSpeed, double ySpeed, int radius, PImage image1, PImage image2) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
+        WinningScreen = image1;
+        GameOver = image2;
     }
 
     public void draw(PApplet window, ArrayList<Brick> bricks) {
+
         this.x += xSpeed;
         this.y += ySpeed;
         window.fill(255, 0, 0);
-        window.ellipse((float) this.x, (float) this.y, (float) this.radius, (float) this.radius);
+       // window.ellipse((float) this.x, (float) this.y, (float) this.radius, (float) this.radius);
 
         for (int i = 0; i < bricks.size(); i++) {
             if (bricks.get(i).getX() >= -100) {
@@ -25,9 +33,10 @@ public class Ball {
             } else if (i == bricks.size() - 1) {
                 xSpeed = 0;
                 ySpeed = 0;
-                window.background(0);
-                window.textSize(20);
-                window.text("CONGRATULATIONS, YOU WON THE GAME", (float) window.width / 2 - 200, (float) window.height / 2);
+                window.background(WinningScreen);
+               // window.background(0);
+               // window.textSize(20);
+               // window.text("CONGRATULATIONS, YOU WON THE GAME", (float) window.width / 2 - 200, (float) window.height / 2);
             }
         }
     }
@@ -62,9 +71,11 @@ public class Ball {
         }
 
         if (this.y + this.radius > window.height) {
-            window.background(0);
-            window.textSize(20);
-            window.text("GAME OVER", (window.width / 2) - 50, window.height / 2);
+
+            window.background(GameOver);
+          //  window.background(0);
+          //  window.textSize(20);
+          //  window.text("GAME OVER", (window.width / 2) - 50, window.height / 2);
             this.xSpeed = 0;
             this.ySpeed = 0;
         }
