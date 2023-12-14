@@ -7,9 +7,6 @@ import java.util.ArrayList;
 public class Main extends PApplet {
     // TODO: declare game variables
 
-    int brickWidth = 50;
-    int brickHeight = 30;
-
     Platform platform;
     Ball ball;
     ArrayList<Brick> bricks;
@@ -23,11 +20,10 @@ public class Main extends PApplet {
     PImage PlatformImage = new PImage();
     PImage backgroundImage = new PImage();
     PImage WinningScreen = new PImage();
-    PImage GameOver = new PImage();
+    PImage GameOver;
 
     public void settings() {
-        size(800, 600);   // set the window size
-
+        size(800, 550);   // set the window size
     }
 
     public void setup() {
@@ -37,20 +33,20 @@ public class Main extends PApplet {
         platform = new Platform(width / 2, 500, 85, 20, 5);
 
         bricks = new ArrayList<>();
-        for (int i = 0; i < width; i += brickWidth) {
-            for (int j = 0; j < 120; j += brickHeight) {
+        for (int i = 0; i < width; i += 50) {
+            for (int j = 0; j < 120; j += 30) {
                 bricks.add(new Brick(i, j, 25, 50));
             }
         }
-        ball = new Ball(400, 300, 1, 3, 20);
+        ball = new Ball(this, 400, 300, 1, 4, 20);
 
 
         PlatformImage = loadImage("PlatformImage.png");
         PlatformImage.resize(platform.width, platform.height);
         BrickImage = loadImage("BrickImage.jpg");
-        BrickImage.resize(brickWidth, brickHeight);
+        BrickImage.resize(50, 30);
         ChristmasOrnament = loadImage("BallOrnament.png");
-        ChristmasOrnament.resize((int)(ball.radius*2)-5-5,(int)(ball.radius*2)-5);
+        ChristmasOrnament.resize((int) (ball.radius * 2) - 5 - 5, (int) (ball.radius * 2) - 5);
         backgroundImage = loadImage("BrickBreakerBackground.png");
         backgroundImage.resize(this.width, this.height);
         WinningScreen = loadImage("WinningScreen.jpg");
@@ -64,8 +60,13 @@ public class Main extends PApplet {
      * tick each object (have it update itself), and draw each object
      */
     public void draw() {
-        background(backgroundImage);
-
+        if(ball.GameWon){
+            background(WinningScreen);
+        }else if (ball.GameEnd) {
+            background(GameOver);
+        }else{
+            background(backgroundImage);
+        }
 
         if (keyPressed) {
             if (keyCode == RIGHT || keyCode == 'd') {
@@ -83,9 +84,10 @@ public class Main extends PApplet {
             image(BrickImage, brick.getX(), brick.getY());
             brick.collide(ball);
         }
-        ball.draw(this, bricks);
+        ball.draw(this, bricks, platform);
         image(PlatformImage, platform.x, platform.y);
-        ball.collision(platform, this);
+        ball.collision(platform, this, bricks);
+
 
         this.color((200));
         this.textSize(12);

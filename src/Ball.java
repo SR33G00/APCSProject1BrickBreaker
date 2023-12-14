@@ -9,18 +9,21 @@ public class Ball {
     PImage WinningScreen = new PImage();
     PImage GameOver = new PImage();
 
+    boolean GameEnd = false;
+    boolean GameWon = false;
 
-    public Ball(double x, double y, double xSpeed, double ySpeed, int radius, PImage image1, PImage image2) {
+
+    public Ball(PApplet window, double x, double y, double xSpeed, double ySpeed, int radius) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
-        WinningScreen = image1;
-        GameOver = image2;
+        GameOver = window.loadImage("GameOver.jpg");
+        WinningScreen = window.loadImage("WinningScreen.jpg");
     }
 
-    public void draw(PApplet window, ArrayList<Brick> bricks) {
+    public void draw(PApplet window, ArrayList<Brick> bricks, Platform platform) {
 
         this.x += xSpeed;
         this.y += ySpeed;
@@ -33,7 +36,10 @@ public class Ball {
             } else if (i == bricks.size() - 1) {
                 xSpeed = 0;
                 ySpeed = 0;
-                window.background(WinningScreen);
+                GameWon = true;
+                bricks.clear();
+                this.x = -100000;
+                platform.x = -10000;
                // window.background(0);
                // window.textSize(20);
                // window.text("CONGRATULATIONS, YOU WON THE GAME", (float) window.width / 2 - 200, (float) window.height / 2);
@@ -41,7 +47,7 @@ public class Ball {
         }
     }
 
-    public void collision(Platform platform, PApplet window) {
+    public void collision(Platform platform, PApplet window, ArrayList<Brick> bricks) {
         //Colliding with platform
         if (this.y + this.radius / 2 >= platform.y) {
             if ((this.x) >= platform.x && this.x <= platform.x + platform.width) {
@@ -50,17 +56,12 @@ public class Ball {
                 this.xSpeed = randomXSpeed();
             }
         }
-/*
-        if (this.x + this.radius >= platform.x || this.x - this.radius <= platform.x + platform.width) {
-            if (this.y <= platform.y && this.y >= platform.y + platform.height) {
-                xSpeed = xSpeed * -1;
-            }
-        }
- */
+
+        //Colliding with walls
+
         if (this.y - this.radius / 2 <= 0) {
             this.ySpeed = ySpeed * -1;
         }
-        //Colliding with walls
 
         if (this.x - this.radius <= 0 || this.x + this.radius / 2 >= window.width) {
             this.xSpeed = this.xSpeed * -1;
@@ -70,9 +71,12 @@ public class Ball {
             ySpeed = -ySpeed;
         }
 
-        if (this.y + this.radius > window.height) {
-
-            window.background(GameOver);
+        //GAME OVER
+        if (this.y + this.radius >= window.height) {
+            GameEnd = true;
+            bricks.clear();
+            this.x = -100000;
+            platform.x = -10000;
           //  window.background(0);
           //  window.textSize(20);
           //  window.text("GAME OVER", (window.width / 2) - 50, window.height / 2);
